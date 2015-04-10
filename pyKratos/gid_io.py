@@ -14,7 +14,7 @@ class GidIO:
         self.zero_based_indices_for_nodes = zero_based_indices_for_nodes
         
     def ReadModelPart(self, model_part):
-        if input_file:
+        if self.input_file:
             for line in self.input_file:
                 if line.find("Begin") != -1:
                     words = self.ReadWords(line)
