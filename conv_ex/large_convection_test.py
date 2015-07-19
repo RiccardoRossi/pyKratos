@@ -1,10 +1,9 @@
 from __future__ import print_function, absolute_import, division 
 import sys
 sys.path.append("..")
-print(sys.path)
-
 from numpy import *
-from variables import *
+from pyKratos import *
+# add variables to be allocated from the list in variables.py
 
 # add variables to be allocated from the list in variables.py
 solution_step_variables = [
@@ -28,7 +27,7 @@ import generate_square
 node_list, element_connectivities, face_connectivities = generate_square.GenerateSquare(nx, dx, ny, dy)
 
 #import py_kratos
-from model_part import *
+#from model_part import *
 
 buffer_size = 3  # store current step and 2 in the past
 model_part = ModelPart(buffer_size, solution_step_variables)
@@ -58,11 +57,11 @@ for node in model_part.NodeIterators():
         node.Fix(TEMPERATURE)
         node.SetSolutionStepValue(TEMPERATURE, 0, 0.0)
 
-import solving_strategy
-import static_scheme
+#import solving_strategy
+#import static_scheme
 time_scheme = static_scheme.StaticScheme(model_part)
 
-import builder_and_solver
+#import builder_and_solver
 builder_and_solver = builder_and_solver.BuilderAndSolver(
     model_part, time_scheme)
 
@@ -71,7 +70,13 @@ strategy = solving_strategy.SolvingStrategy(
 
 strategy.Initialize()
 
-import plot_contour
+mesh_name = "ConvectionDiffusion"
+gid_io = GidIO("convection_diffusion.mdpa", "convection_diffusion")
+
+gid_io.WriteMesh(model_part, mesh_name)
+
+
+#import plot_contour
 dt = 0.1
 nsteps = 20
 for i in range(1,nsteps):
@@ -81,8 +86,9 @@ for i in range(1,nsteps):
     strategy.Solve()
     print("after solve")
     
-    outname = "fig"+str(time)+".png"
-    plot_contour.PlotContour(model_part.NodeIterators(), TEMPERATURE, outname )
+    gid_io.WriteNodalResults(TEMPERATURE, model_part.NodeIterators(), time)
+    #outname = "fig"+str(time)+".png"
+    #plot_contour.PlotContour(model_part.NodeIterators(), TEMPERATURE, outname )
     
     #for node in model_part.NodeIterators():
         #if(node.coordinates[1] < 0.00001):
