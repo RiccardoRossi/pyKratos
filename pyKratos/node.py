@@ -27,7 +27,7 @@ class Node:
         self.var_is_fixed[variable_name] = True
 
     def Free(self, variable_name):
-        self.var_is_fixed[variable_name] = Free
+        self.var_is_fixed[variable_name] = False
 
     def IsFixed(self, variable_name):
         return self.var_is_fixed[variable_name]
