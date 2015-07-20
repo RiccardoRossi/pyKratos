@@ -3,7 +3,7 @@ import numpy as np
 from scipy.interpolate import griddata
 import matplotlib.pyplot as plt
 import numpy.ma as ma
-import variables
+from pyKratos import *
 
 
 def PlotContour(Nodes, variable,name):
