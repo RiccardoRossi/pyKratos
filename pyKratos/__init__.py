@@ -11,3 +11,4 @@ from . import solving_strategy
 from . import static_scheme
 from . import builder_and_solver
 from . import line2d
+from . import point2d
