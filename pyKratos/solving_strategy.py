@@ -18,7 +18,7 @@ class SolvingStrategy:
         self.builder_and_solver.SetupDofSet()
 
         # allocate memory for the system
-        self.A, self.x, self.b = self.builder_and_solver.SetupSystem(
+        self.A, self.dx, self.b = self.builder_and_solver.SetupSystem(
             self.A, self.dx, self.b)
 
     def Solve(self):
@@ -27,10 +27,17 @@ class SolvingStrategy:
 
         # do build and solve
         self.A, self.dx, self.b = self.builder_and_solver.BuildAndSolve(
-            self.A, self.x, self.b)
+            self.A, self.dx, self.b)
+
+        
 
         # call scheme to do update
         self.scheme.Update(self.builder_and_solver.dofset, self.dx)
+
+    def ComputeReactionsVector(self):
+        self.A, self.dx, self.b = self.builder_and_solver.Build(
+            self.A, self.dx, self.b)
+        return self.b
 
     def SpyMatrix(self):
         try:
