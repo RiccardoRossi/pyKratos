@@ -5,7 +5,7 @@ from scipy import sparse
 
 
 class BuilderAndSolver:
-    use_sparse_matrices = True
+    use_sparse_matrices = False
 
     '''ATTENTION!!
     this builder and solver assumes elements to be written IN RESIDUAL FORM and hence
@@ -89,7 +89,7 @@ class BuilderAndSolver:
 
     def ApplyDirichlet(self, A, dx, b):
         ndof = A.shape[0]
-        if(self.use_sparse_matrices == False):
+        if(self.use_sparse_matrices == False): #dense matrix!
             for dof in self.dirichlet_dof:
                 fixed_eqn = dof.GetEquationId()
                 for i in range(0, ndof):
@@ -97,6 +97,7 @@ class BuilderAndSolver:
                     A[i, fixed_eqn] = 0.0
                 A[fixed_eqn, fixed_eqn] = 1.0
                 b[fixed_eqn] = 0.0  # note that this is zero since we assume residual form!
+            
         else:
             # expensive loop: exactly set to 1 the diagonal
             # could be done cheaper, but i want to guarantee accuracy
